@@ -121,7 +121,6 @@ This script appends `python /sdcard/Download/jeangrey_android.py &` to `~/.bashr
 - Bots update `last_seen` in their JSON for long-term tracking
 - Dashboard allows real-time monitoring of bot activity
 - AI listener allows EVA to run passively and react to threats or schedules
-- Future expansion may include cloud beaconing, peer relay, GPT triggers, and full EVA voice AI
 
 ---
 
