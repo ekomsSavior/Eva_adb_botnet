@@ -28,6 +28,27 @@ wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip
 unzip ngrok-stable-linux-amd64.zip
 chmod +x ngrok
 ```
+##optional adb install if youre having issues with the above adb install: 
+Use Google’s ADB installer
+Manual method (safe + universal):
+
+```bash
+sudo mkdir -p /opt/android-platform-tools
+cd /opt/android-platform-tools
+sudo wget https://dl.google.com/android/repository/platform-tools-latest-linux.zip
+sudo unzip platform-tools-latest-linux.zip
+sudo mv platform-tools/* .
+sudo rm -r platform-tools platform-tools-latest-linux.zip
+```
+
+Then add ADB to your PATH permanently:
+```bash
+echo 'export PATH=$PATH:/opt/android-platform-tools' >> ~/.bashrc
+source ~/.bashrc
+```
+
+
+
 
 You should now have:
 - All EVA scripts in this folder (`Eva_adb_botnet/`)
