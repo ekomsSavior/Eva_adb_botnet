@@ -27,7 +27,7 @@ def banner():
 ▐▛▀▀▘▐▌  ▐▌▐▛▀▜▌    ▐▛▀▜▌▐▌  █▐▛▀▚▖    
 ▐▙▄▄▖ ▝▚▞▘ ▐▌ ▐▌    ▐▌ ▐▌▐▙▄▄▀▐▙▄▞▘    
 
-     TEAM EVA LAUNCHER v3 · Destiny Protocol
+     EVA ADB BOTNET : X,m0use,eKs
 """)
 
 def main():
