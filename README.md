@@ -6,12 +6,18 @@
 
 ## Getting Started (Clone + Setup)
 
-From any Kali Linux system:
+To install EVA on any Kali Linux system using your GitHub SSH key:
+
+### 1. Clone the private repository using SSH
 
 ```bash
-git clone https://github.com/ekomsSavior/Eva_adb_botnet.git
+git clone git@github.com:ekomsSavior/Eva_adb_botnet.git
 cd Eva_adb_botnet
 ```
+
+> ⚠️ If this doesn't work, make sure you’ve:
+> - [ ] Added your SSH key to GitHub under Settings → SSH and GPG keys  
+> - [ ] Tested the connection with: `ssh -T git@github.com` 
 
 Now install dependencies:
 
