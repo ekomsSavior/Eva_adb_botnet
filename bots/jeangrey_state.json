@@ -1,0 +1,32 @@
+import json
+import socket
+import time
+import os
+
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        return s.getsockname()[0]
+    except:
+        return "127.0.0.1"
+    finally:
+        s.close()
+
+def generate_bot_state():
+    ip = get_local_ip()
+    bot_id = f"bot_{ip.replace('.', '_')}"
+    state = {
+        "bot_id": bot_id,
+        "ip": ip,
+        "joined": time.ctime(),
+        "last_seen": time.ctime(),
+        "tags": ["mesh", "android", "jeangrey", "active"]
+    }
+    os.makedirs(f"bots/{bot_id}", exist_ok=True)
+    with open(f"bots/{bot_id}/jeangrey_state.json", "w") as f:
+        json.dump(state, f, indent=4)
+    return state  # You can use this in respond_to_core
+
+# Example usage at bot startup:
+bot_state = generate_bot_state()
