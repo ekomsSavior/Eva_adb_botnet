@@ -27,7 +27,7 @@ def banner():
 ▐▛▀▀▘▐▌  ▐▌▐▛▀▜▌    ▐▛▀▜▌▐▌  █▐▛▀▚▖    
 ▐▙▄▄▖ ▝▚▞▘ ▐▌ ▐▌    ▐▌ ▐▌▐▙▄▄▀▐▙▄▞▘    
 
-     EVA ADB BOTNET : X,m0use,eKs
+     By: ek0msSavi0r
 """)
 
 def main():
