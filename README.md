@@ -15,10 +15,6 @@ git clone https://github.com/ekomsSavior/Eva_adb_botnet.git
 cd Eva_adb_botnet
 ```
 
->  If this doesn't work, make sure you’ve:
-> - [ ] Added your SSH key to GitHub under Settings → SSH and GPG keys  
-> - [ ] Tested the connection with: `ssh -T git@github.com` 
-
 Now install dependencies:
 
 ```bash
