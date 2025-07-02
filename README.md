@@ -23,13 +23,6 @@ pip3 install pycryptodome requests
 mkdir -p bots
 ```
 
-Then download and install `ngrok`:
-
-```bash
-wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip
-unzip ngrok-stable-linux-amd64.zip
-chmod +x ngrok
-```
 ##optional adb install if youre having issues with the above adb install: 
 Use Google’s ADB installer
 Manual method (safe + universal):
@@ -47,6 +40,13 @@ Then add ADB to your PATH permanently:
 ```bash
 echo 'export PATH=$PATH:/opt/android-platform-tools' >> ~/.bashrc
 source ~/.bashrc
+```
+Then download and install `ngrok`:
+
+```bash
+wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip
+unzip ngrok-stable-linux-amd64.zip
+chmod +x ngrok
 ```
 
 
