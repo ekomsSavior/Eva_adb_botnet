@@ -33,6 +33,7 @@ def banner():
 def main():
     banner()
     run("adb_reaper.py")
+    run("local_adb_scanner.py")
     run("adb_dropper.py")
     run("metasploit_launcher.py")
     run("jeangrey_injector.py")
