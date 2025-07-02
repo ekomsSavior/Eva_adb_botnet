@@ -50,7 +50,11 @@ unzip ngrok-stable-linux-amd64.zip
 chmod +x ngrok
 ```
 
+now add your auth token found on your ngrok account:
 
+```bash
+ngrok config add-authtoken $your_authtoken
+```
 
 
 You should now have:
