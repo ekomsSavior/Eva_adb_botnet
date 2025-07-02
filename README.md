@@ -98,7 +98,7 @@ LPORT = "12345"              # your forwarded port
 OUTPUT = "adb_payload.apk"   # payload filename
 ```
 
-This file no longer launches the console — it generates a ready-to-push APK payload.
+This file generates a ready-to-push APK payload.
 
 ---
 
