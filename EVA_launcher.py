@@ -15,6 +15,10 @@ def run_bg(script):
     print(f"[###] Launching {script} in background...\n")
     threading.Thread(target=lambda: subprocess.run(["python3", script])).start()
 
+def run_bg_silent(script):
+    print(f"[>>>] Running {script} in background (silent)...\n")
+    subprocess.Popen(["python3", script], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 def run_sh(script):
     print(f"[###] Running shell script: {script}...\n")
     subprocess.run(["adb", "push", script, "/sdcard/Download/"])
@@ -33,7 +37,7 @@ def banner():
 def main():
     banner()
     run("adb_reaper.py")
-    run("local_adb_scanner.py")
+    run_bg_silent("local_adb_scanner.py")  # 🧠 Now non-blocking
     run("adb_dropper.py")
     run("metasploit_launcher.py")
     run("jeangrey_injector.py")
