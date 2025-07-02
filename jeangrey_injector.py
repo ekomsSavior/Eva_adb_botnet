@@ -3,7 +3,7 @@ import time
 import os
 
 TARGET_FILE = "adb_hits.txt"
-JEANGREY_PAYLOAD = "/root/jeangrey_android.py"
+JEANGREY_PAYLOAD = os.path.join(os.path.dirname(__file__), "jeangrey_android.py")
 DEVICE_PATH = "/sdcard/Download/jeangrey_android.py"
 
 def inject_jeangrey(ip):
