@@ -1,5 +1,5 @@
 # EVA ADB Botnet  
-**Built by:** x3rx3s, ekomsSavior & m0usem0use  
+
 **Purpose:** Ethical cybersecurity research, mesh-based botnet exploration, long-term persistent control of Android devices via open ADB, and encrypted peer-to-peer botnet mesh command.
 
 ---
