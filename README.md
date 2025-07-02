@@ -76,6 +76,8 @@ chmod +x ngrok
 
 Copy the **forwarded ngrok domain and port** — you’ll need them in the payload config below.
 
+You will need a paid ngrok account for tcp comms. their basic personal dev membership is only $8 and completly worth it.
+
 ---
 
 ##  One-Time Configuration (Before Launch)
